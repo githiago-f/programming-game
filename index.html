@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="editor">
+        <button id="run">Run ></button>
+        <textarea name="script-editor" id="script-editor" cols="30" rows="10"></textarea>
+      </div>
+      <div id="game"></div>
+      <div class="vars">
+        <table id="vars">
+          <thead><th><td>Name</td><td>Value</td></th></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
