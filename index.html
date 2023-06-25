@@ -4,22 +4,25 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <title>Programming Games | Move the object</title>
   </head>
   <body>
-    <div id="app">
-      <div class="editor">
-        <button id="run">Run ></button>
-        <textarea name="script-editor" id="script-editor" cols="30" rows="10"></textarea>
+    <section class="game-screen">
+      <div id="editor">
+        <nav class="controls">
+          <button id="run">Run </button>
+        </nav>
+        <textarea name="script-editor" id="script-editor"></textarea>
       </div>
       <div id="game"></div>
-      <div class="vars">
+      <div id="debug-panel">
         <table id="vars">
           <thead><th><td>Name</td><td>Value</td></th></thead>
           <tbody></tbody>
         </table>
+        <pre id="console"></pre>
       </div>
-    </div>
-    <script type="module" src="/main.js"></script>
+    </section>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>

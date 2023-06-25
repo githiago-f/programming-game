@@ -1,15 +1,19 @@
 import { renderVariables } from "./render-variables";
 
 // memory registers
-export const vars = new Map(); // { varName: value }
+let VARS = new Map(), CONSOLE = '-- START --\n';
+
+export function resetProgram() {
+  VARS = new Map(), CONSOLE = '-- START --\n';
+}
 
 // constants
-const varStatement = /[^\s]\s?\=\s?[^\s]/i;
+const varStatement = /[^\s\"]\s?\=\s?[^\s]/i;
 const conditionStatement = /[^\s]\s?(>=|<=|>|<|==)\s?[^\s]/;
 const aritimeticStatement = /[0-9]*\s?(\*|\+|\/|\-|\%)\s?[0-9]*/;
-const ifStatement = /^if\([^]+\):$/;
-const whileStatement = /^while\([^]+\):$/;
-const printStatement = /^print\([^]+\)/;
+const ifStatement = /^se\([^]+\):$/i;
+const whileStatement = /^enquanto\([^]+\):$/i;
+const printStatement = /^escreve\([^]+\)/;
 
 // interpreter functions
 export function interpreter(program) {
@@ -29,9 +33,9 @@ export function interpreter(program) {
       handleAssignment(line);
     }
     else if (printStatement.test(line)) {
-      console.log(atom(line.replace(/print\(|\)$/g, '')));
+      handlePrint(line);
     }
-    renderVariables(vars);
+    renderVariables(VARS);
   }
 }
 
@@ -60,21 +64,21 @@ function conditions(operation) {
   }
 }
 function atom(val) {
-  if (conditionStatement.test(val)) return conditions(val);
+  if (val.startsWith('"') && val.endsWith('"')) return val.replace(/"/g, '');
+  else if (conditionStatement.test(val)) return conditions(val);
   else if (aritimeticStatement.test(val)) return aritimatics(val);
   else if (!isNaN(Number(val))) return Number(val);
   else if (val === 'true') return true;
   else if (val === 'false') return false;
-  else if (val.startsWith('"') && val.endsWith('"')) return val.replace(/"/g, '');
   else {
-    if (vars.has(val))
-      return vars.get(val);
+    if (VARS.has(val))
+      return VARS.get(val);
     throw Error(val + ' is not defined');
   }
 }
 function handleAssignment(line) {
   const [name, ...value] = line.split(/=/);
-  vars.set(name.trim(), atom(value.join('').trim()));
+  VARS.set(name.trim(), atom(value.join('').trim()));
 }
 function countNestedLines(line, nextLines) {
   function indentationCount(ln) {
@@ -93,14 +97,22 @@ function countNestedLines(line, nextLines) {
   return nestedLines;
 }
 function handleLoops(line, nextLines) {
-  const condition = () => atom(line.replace(/while\(|\)\:/g, ''));
+  const condition = () => atom(line.replace(/enquanto\(|\)\:/g, ''));
   while(condition()) {
     interpreter(nextLines.join('\n'));
   }
 }
 function handleIf(line, nextLines) {
   const nestedLines = countNestedLines(line, nextLines);
-  const value = atom(line.trim().replace(/if\(|\)\:/g, ''));
+  const value = atom(line.trim().replace(/se\(|\)\:/g, ''));
   if (value === true) return 0;
   return nestedLines;
+}
+
+function handleCall(line) {}
+
+function handlePrint(line) {
+  const val = atom(line.replace(/escreve\(|\)$/g, ''));
+  CONSOLE += val + '\n';
+  document.getElementById('console').innerHTML = CONSOLE;
 }
