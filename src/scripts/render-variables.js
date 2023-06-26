@@ -4,11 +4,11 @@
 const varsTable = document.getElementById('vars');
 
 /**
- * 
- * @param {Map<string, number|string|boolean>} state 
+ *
+ * @param {Map<string, number|string|boolean>} state
  */
 export function renderVariables(state) {
-    varsTable.innerHTML = `<thead><th><td>Name</td><td>Value</td></th></thead>`;
+    varsTable.innerHTML = `<thead><th><td>Variavel</td><td>Valor</td></th></thead>`;
     varsTable.createTBody();
     for (const [key, val] of state) {
         const row = varsTable.insertRow();

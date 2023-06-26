@@ -37,7 +37,7 @@ button {
 .game-screen {
   display: grid;
   width: 100%;
-  grid-template: 
+  grid-template:
     "editor game game"
     "editor game game"
     "editor debug debug";
@@ -59,8 +59,12 @@ button {
   border-radius: 0;
 }
 
-#game {
+#game-screen {
   grid-area: game;
+}
+#game {
+  margin: auto;
+  max-width: 800px;
 }
 
 #debug-panel {

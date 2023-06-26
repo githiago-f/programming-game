@@ -1,13 +1,11 @@
 import { renderVariables } from "./render-variables";
 
-// memory registers
 let VARS = new Map(), CONSOLE = '-- START --\n';
 
 export function resetProgram() {
   VARS = new Map(), CONSOLE = '-- START --\n';
 }
 
-// constants
 const varStatement = /[^\s\"]\s?\=\s?[^\s]/i;
 const conditionStatement = /[^\s]\s?(>=|<=|>|<|==)\s?[^\s]/;
 const aritimeticStatement = /[0-9]*\s?(\*|\+|\/|\-|\%)\s?[0-9]*/;
@@ -15,11 +13,11 @@ const ifStatement = /^se\([^]+\):$/i;
 const whileStatement = /^enquanto\([^]+\):$/i;
 const printStatement = /^escreve\([^]+\)/;
 
-// interpreter functions
 export function interpreter(program) {
   const lines = program.split(/\n/g);
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
+    if(line.startsWith("#")) { continue; }
     if(whileStatement.test(line)) {
       const linesToJump = countNestedLines(lines[i], lines.slice(i+1));
       const nextLines = lines.slice(i+1, i + 1 + linesToJump);
@@ -38,7 +36,6 @@ export function interpreter(program) {
     renderVariables(VARS);
   }
 }
-
 function aritimatics(operation) {
   let [left, op, right] = operation.split(/(\*|\+|\\|\-|\%)/);
   left = left.trim();
@@ -64,15 +61,14 @@ function conditions(operation) {
   }
 }
 function atom(val) {
-  if (val.startsWith('"') && val.endsWith('"')) return val.replace(/"/g, '');
-  else if (conditionStatement.test(val)) return conditions(val);
+  if (conditionStatement.test(val)) return conditions(val);
   else if (aritimeticStatement.test(val)) return aritimatics(val);
+  else if (val.startsWith('"') && val.endsWith('"')) return val.replace(/"/g, '');
   else if (!isNaN(Number(val))) return Number(val);
   else if (val === 'true') return true;
   else if (val === 'false') return false;
   else {
-    if (VARS.has(val))
-      return VARS.get(val);
+    if (VARS.has(val)) return VARS.get(val);
     throw Error(val + ' is not defined');
   }
 }
@@ -108,9 +104,6 @@ function handleIf(line, nextLines) {
   if (value === true) return 0;
   return nestedLines;
 }
-
-function handleCall(line) {}
-
 function handlePrint(line) {
   const val = atom(line.replace(/escreve\(|\)$/g, ''));
   CONSOLE += val + '\n';
