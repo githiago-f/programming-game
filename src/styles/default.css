@@ -45,32 +45,16 @@ button {
 }
 
 #editor {
-  background-color: var(--editor-color);
   grid-area: editor;
+  width: 50vw;
 }
-#editor textarea {
-  width: calc(99% - 1rem);
+#editor #script-editor {
+  width: 100%;
   height: calc(100% - 4.5rem);
-  font-size: xx-large;
-  background-color: var(--editor-color);
-  border: none;
-  padding-left: 1rem;
-  resize: none;
-  border-radius: 0;
-}
-
-#game-screen {
-  grid-area: game;
-}
-#game {
-  margin: auto;
-  max-width: 800px;
 }
 
 #debug-panel {
   grid-area: debug;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
 }
 
 .controls {

@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  ace-code:
+    specifier: ^1.24.1
+    version: 1.24.1
   pixi.js:
     specifier: ^7.2.4
     version: 7.2.4(@pixi/utils@7.2.4)
@@ -575,6 +578,11 @@ packages:
 
   /@types/offscreencanvas@2019.7.0:
     resolution: {integrity: sha512-PGcyveRIpL1XIqK8eBsmRBt76eFgtzuPiSTyKHZxnGemp2yzGzWpjYKAfK3wIMiU7eH+851yEpiuP8JZerTmWg==}
+    dev: false
+
+  /ace-code@1.24.1:
+    resolution: {integrity: sha512-pRdEBQpwnXcH4l9BRhevjkICdKt3m7YEN5O+XJ4xtEpqZS5fUt9ZIXlb3UmLU9wl+tYAXm+IN1p0UVUS+C9DWQ==}
+    engines: {node: '>= 0.6.0'}
     dev: false
 
   /call-bind@1.0.2:

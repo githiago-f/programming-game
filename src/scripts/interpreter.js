@@ -1,5 +1,3 @@
-import { renderVariables } from "./render-variables";
-
 let VARS = new Map(), CONSOLE = '-- START --\n';
 
 export function resetProgram() {
@@ -15,25 +13,29 @@ const printStatement = /^escreve\([^]+\)/;
 
 export function interpreter(program) {
   const lines = program.split(/\n/g);
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if(line.startsWith("#")) { continue; }
-    if(whileStatement.test(line)) {
-      const linesToJump = countNestedLines(lines[i], lines.slice(i+1));
-      const nextLines = lines.slice(i+1, i + 1 + linesToJump);
-      handleLoops(line, nextLines, linesToJump);
-      i += linesToJump;
+  try {
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if(line.startsWith("#")) { continue; }
+      if(whileStatement.test(line)) {
+        const linesToJump = countNestedLines(lines[i], lines.slice(i+1));
+        const nextLines = lines.slice(i+1, i + 1 + linesToJump);
+        handleLoops(line, nextLines, linesToJump);
+        i += linesToJump;
+      }
+      else if (ifStatement.test(line)) {
+        i += handleIf(lines[i], lines.slice(i + 1));
+      }
+      else if (varStatement.test(line)) {
+        handleAssignment(line);
+      }
+      else if (printStatement.test(line)) {
+        handlePrint(line);
+      }
     }
-    else if (ifStatement.test(line)) {
-      i += handleIf(lines[i], lines.slice(i + 1));
-    }
-    else if (varStatement.test(line)) {
-      handleAssignment(line);
-    }
-    else if (printStatement.test(line)) {
-      handlePrint(line);
-    }
-    renderVariables(VARS);
+  } catch(e) {
+    const currentConsole = String(document.getElementById('console').innerText);
+    document.getElementById('console').innerHTML = currentConsole + e.message;
   }
 }
 function aritimatics(operation) {
